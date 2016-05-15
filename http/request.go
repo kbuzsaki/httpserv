@@ -6,12 +6,17 @@ import (
 	"strings"
 )
 
+type QueryParam struct {
+	Key string
+	Val string
+}
+
 type Request struct {
 	lines   []string
 	Method  string
 	Uri     string
 	Path    string
-	Query   map[string]string
+	Query   []QueryParam
 	Version string
 }
 
@@ -25,12 +30,12 @@ func (request *Request) ParseRequestLine(line string) {
 	request.Path = uriSegments[0]
 
 	if len(uriSegments) > 1 {
-		request.Query = make(map[string]string)
 		querySegments := strings.Split(uriSegments[1], "&")
-		for _, param := range querySegments {
+		for _, querySegment := range querySegments {
 			// TODO: url decode the parameters
-			paramSegments := strings.Split(param, "=")
-			request.Query[paramSegments[0]] = paramSegments[1]
+			paramSegments := strings.Split(querySegment, "=")
+			param := QueryParam{paramSegments[0], paramSegments[1]}
+			request.Query = append(request.Query, param)
 		}
 	}
 }

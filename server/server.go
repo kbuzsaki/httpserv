@@ -34,5 +34,11 @@ func HandleHelloWorld(conn net.Conn) {
 	conn.Write([]byte("<h1>Hello World</h1>\n"))
 	conn.Write([]byte("<p>You requested path: " + request.Path + "</p>\n"))
 
+	conn.Write([]byte("<table><thead><th>Key</th><th>Value</th></thead><tbody>"))
+	for _, param := range request.Query {
+		conn.Write([]byte("<tr><td>" + param.Key + "</td><td>" + param.Val + "</td></tr>\n"))
+	}
+	conn.Write([]byte("</tbody></table>\n"))
+
 	conn.Close()
 }
