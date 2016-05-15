@@ -31,8 +31,8 @@ func HandleHelloWorld(conn net.Conn) {
 	conn.Write([]byte("\n"))
 
 	// write sample body
-	conn.Write([]byte("Hello World\n"))
-	conn.Write([]byte(header.String() + "\n"))
+	conn.Write([]byte("<h1>Hello World</h1>\n"))
+	conn.Write([]byte("<p>You requested path: " + header.Path + "</p>\n"))
 
 	conn.Close()
 }
