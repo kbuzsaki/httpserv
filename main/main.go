@@ -13,8 +13,9 @@ func main() {
 	}
 
 	routes := []server.Route{
-		{"/", server.HelloWorldHandler{}},
-		{"/hello", server.HelloWorldHandler{}},
+		{"^/$", server.HelloWorldHandler{}},
+		{"^/hello$", server.HelloWorldHandler{}},
+		{"^/hello/", server.HelloWorldHandler{}},
 	}
 	handler := server.RoutingHandler{
 		routes,

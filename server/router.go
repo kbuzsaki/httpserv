@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/kbuzsaki/httpserv/http"
+	"regexp"
 )
 
 type Route struct {
@@ -10,7 +11,8 @@ type Route struct {
 }
 
 func (route Route) Matches(request http.Request) bool {
-	return request.Path == route.Pattern
+	matched, err := regexp.MatchString(route.Pattern, request.Path)
+	return matched && err == nil
 }
 
 type RoutingHandler struct {
