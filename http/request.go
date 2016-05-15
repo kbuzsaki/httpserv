@@ -28,6 +28,7 @@ func (request *Request) ParseRequestLine(line string) {
 		request.Query = make(map[string]string)
 		querySegments := strings.Split(uriSegments[1], "&")
 		for _, param := range querySegments {
+			// TODO: url decode the parameters
 			paramSegments := strings.Split(param, "=")
 			request.Query[paramSegments[0]] = paramSegments[1]
 		}
