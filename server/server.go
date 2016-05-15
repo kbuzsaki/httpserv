@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/kbuzsaki/http/http"
 	"log"
 	"net"
 )
@@ -17,24 +18,20 @@ func ServeHelloWorld(listener net.Listener) {
 }
 
 func HandleHelloWorld(conn net.Conn) {
-	var buf []byte
-	var n int
-	var err error
-
-	log.Println("request contents:")
-	n, err = conn.Read(buf)
-	for err == nil {
-		log.Println(string(buf[:n]))
-		n, err = conn.Read(buf)
+	// read header
+	header, err := http.ReadHeader(conn)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 
-	resp := []string{"HTTP/1.1 200 OK", "", "Hello World"}
+	// write sample header
+	conn.Write([]byte(http.StatusOk.String() + "\n"))
+	conn.Write([]byte("\n"))
 
-	for _, line := range resp {
-		conn.Write([]byte(line + "\n"))
-	}
-
-	log.Println("response complete")
+	// write sample body
+	conn.Write([]byte("Hello World\n"))
+	conn.Write([]byte(header.String() + "\n"))
 
 	conn.Close()
 }
