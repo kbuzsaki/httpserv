@@ -32,9 +32,14 @@ func (request *Request) ParseRequestLine(line string) {
 	if len(uriSegments) > 1 {
 		querySegments := strings.Split(uriSegments[1], "&")
 		for _, querySegment := range querySegments {
-			// TODO: url decode the parameters
 			paramSegments := strings.Split(querySegment, "=")
-			param := QueryParam{paramSegments[0], paramSegments[1]}
+
+			// TODO: url decode the parameters
+			param := QueryParam{paramSegments[0], ""}
+			if len(paramSegments) > 1 {
+				param.Val = paramSegments[1]
+			}
+
 			request.Query = append(request.Query, param)
 		}
 	}
