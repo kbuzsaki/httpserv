@@ -19,7 +19,7 @@ func ServeHelloWorld(listener net.Listener) {
 
 func HandleHelloWorld(conn net.Conn) {
 	// read header
-	header, err := http.ReadHeader(conn)
+	request, err := http.ReadRequest(conn)
 	if err != nil {
 		log.Println(err)
 		return
@@ -32,7 +32,7 @@ func HandleHelloWorld(conn net.Conn) {
 
 	// write sample body
 	conn.Write([]byte("<h1>Hello World</h1>\n"))
-	conn.Write([]byte("<p>You requested path: " + header.Path + "</p>\n"))
+	conn.Write([]byte("<p>You requested path: " + request.Path + "</p>\n"))
 
 	conn.Close()
 }
