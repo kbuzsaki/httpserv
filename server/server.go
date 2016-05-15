@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/kbuzsaki/http/http"
+	"github.com/kbuzsaki/httpserv/http"
 	"log"
 	"net"
 )
