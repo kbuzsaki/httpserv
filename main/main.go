@@ -12,5 +12,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	server.ServeEcho(listener)
+	routes := []server.Route{
+		{"/", server.HelloWorldHandler{}},
+		{"/hello", server.HelloWorldHandler{}},
+	}
+	handler := server.RoutingHandler{
+		routes,
+		server.EchoHandler{},
+	}
+	server.ServeHandler(listener, &handler)
 }
