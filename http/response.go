@@ -32,3 +32,9 @@ func (status *Status) WriteTo(writer io.Writer) (int64, error) {
 
 var StatusOk Status = Status{200, "OK"}
 var StatusNotFound Status = Status{404, "Not Found"}
+
+type Response struct {
+	Protocol Protocol
+	Status   Status
+	Body     string
+}

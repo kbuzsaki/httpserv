@@ -12,5 +12,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	server.ServeHelloWorld(listener)
+	server.ServeEcho(listener)
 }
