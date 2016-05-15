@@ -5,6 +5,17 @@ import (
 	"strconv"
 )
 
+type Protocol struct {
+	Name    string
+	Version string
+}
+
+var HttpOneDotOne = Protocol{"HTTP", "1.1"}
+
+func (protocol *Protocol) String() string {
+	return protocol.Name + "/" + protocol.Version
+}
+
 type Status struct {
 	Code int
 	Name string

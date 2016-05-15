@@ -26,6 +26,7 @@ func HandleHelloWorld(conn net.Conn) {
 	}
 
 	// write sample header
+	conn.Write([]byte(http.HttpOneDotOne.String() + " "))
 	conn.Write([]byte(http.StatusOk.String() + "\n"))
 	conn.Write([]byte("\n"))
 
