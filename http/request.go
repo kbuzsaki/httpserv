@@ -45,6 +45,16 @@ func (request *Request) ParseRequestLine(line string) {
 	}
 }
 
+func (request *Request) Param(key string) QueryParam {
+	for _, param := range request.Query {
+		if param.Key == key {
+			return param
+		}
+	}
+
+	return QueryParam{}
+}
+
 func (request *Request) String() string {
 	return strings.Join(request.lines, "\n")
 }
