@@ -2,6 +2,7 @@ package http
 
 import (
 	"bufio"
+	"errors"
 	"io"
 	"strings"
 )
@@ -63,19 +64,28 @@ func ReadRequest(reader io.Reader) (Request, error) {
 	request := Request{}
 
 	scanner := bufio.NewScanner(reader)
+
+	// first read the request line
+	if !scanner.Scan() {
+		if err := scanner.Err(); err != nil {
+			return request, err
+		} else {
+			return request, errors.New("Empty request")
+		}
+	}
+	line := scanner.Text()
+	request.lines = append(request.lines, line)
+	request.ParseRequestLine(line)
+
+	// then read each of the headers
 	for scanner.Scan() {
-		// read until the first empty line, which signals the end of the request
-		line := scanner.Text()
+		// read until the first empty line, which signals the end of the headers
+		line = scanner.Text()
 		if line == "" {
 			break
 		}
 
 		request.lines = append(request.lines, line)
-
-		// hacky way to check if we've set the method yet
-		if request.Method == "" {
-			request.ParseRequestLine(line)
-		}
 	}
 
 	err := scanner.Err()
