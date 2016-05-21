@@ -19,6 +19,7 @@ type Request struct {
 	Path    string
 	Query   []QueryParam
 	Version string
+	Headers map[string]string
 }
 
 func (request *Request) ParseRequestLine(line string) {
@@ -46,6 +47,18 @@ func (request *Request) ParseRequestLine(line string) {
 	}
 }
 
+func (request *Request) ParseHeader(line string) {
+	segments := strings.Split(line, ": ")
+
+	if len(segments) != 2 {
+		return
+	}
+
+	header := segments[0]
+	value := segments[1]
+	request.Headers[header] = value
+}
+
 func (request *Request) Param(key string) QueryParam {
 	for _, param := range request.Query {
 		if param.Key == key {
@@ -61,7 +74,7 @@ func (request *Request) String() string {
 }
 
 func ReadRequest(reader io.Reader) (Request, error) {
-	request := Request{}
+	request := Request{Headers: make(map[string]string)}
 
 	scanner := bufio.NewScanner(reader)
 
@@ -86,6 +99,7 @@ func ReadRequest(reader io.Reader) (Request, error) {
 		}
 
 		request.lines = append(request.lines, line)
+		request.ParseHeader(line)
 	}
 
 	err := scanner.Err()
