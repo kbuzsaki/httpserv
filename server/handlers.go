@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"github.com/kbuzsaki/httpserv/http"
 )
 
@@ -24,6 +25,9 @@ func (h EchoHandler) Handle(request http.Request) http.Response {
 
 	body := "<h1>Echo Response</h1>\n"
 	body += "<p>You requested path: " + request.Path + "</p>\n"
+
+	requestJsonBytes, _ := json.MarshalIndent(&request, "", "    ")
+	body += "<pre>" + string(requestJsonBytes) + "</pre>"
 
 	body += "<table><thead><th>Key</th><th>Value</th></thead><tbody>"
 	for _, param := range request.Query {
