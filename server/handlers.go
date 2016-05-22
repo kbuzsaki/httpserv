@@ -74,6 +74,11 @@ func (h StaticFileHandler) serveDirectory(request http.Request, filePath string)
 		return http.MakeRedirectResponse("/" + filePath + "/")
 	}
 
+	indexPath := path.Join(filePath, "index.html")
+	if indexInfo, err := os.Stat(indexPath); err == nil && !indexInfo.IsDir() {
+		return h.serveFile(request, indexPath)
+	}
+
 	entries, err := ioutil.ReadDir(filePath)
 	if err != nil {
 		return http.MakeErrorResponse(http.StatusInternalError, err)
