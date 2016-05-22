@@ -32,6 +32,7 @@ func (status *Status) WriteTo(writer io.Writer) (int64, error) {
 
 var StatusOk Status = Status{200, "OK"}
 var StatusNotFound Status = Status{404, "Not Found"}
+var StatusInternalError = Status{500, "Internal Server Error"}
 
 type Response struct {
 	Protocol Protocol
@@ -41,4 +42,9 @@ type Response struct {
 
 func MakeSimpleResponse(body string) Response {
 	return Response{HttpOneDotOne, StatusOk, body}
+}
+
+func MakeErrorResponse(status Status, err error) Response {
+	body := "<h1>" + status.String() + "</h1>" + err.Error()
+	return Response{HttpOneDotOne, status, body}
 }
