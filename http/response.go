@@ -38,3 +38,7 @@ type Response struct {
 	Status   Status
 	Body     string
 }
+
+func MakeSimpleResponse(body string) Response {
+	return Response{HttpOneDotOne, StatusOk, body}
+}

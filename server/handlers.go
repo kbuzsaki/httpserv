@@ -12,7 +12,7 @@ type HelloWorldHandler struct {
 }
 
 func (h HelloWorldHandler) Handle(request http.Request) http.Response {
-	return http.Response{http.HttpOneDotOne, http.StatusOk, "Hello World"}
+	return http.MakeSimpleResponse("Hello World")
 }
 
 // sample echoing server and handler
@@ -20,11 +20,6 @@ type EchoHandler struct {
 }
 
 func (h EchoHandler) Handle(request http.Request) http.Response {
-	var response http.Response
-
-	response.Protocol = http.HttpOneDotOne
-	response.Status = http.StatusOk
-
 	body := "<h1>Echo Response</h1>\n"
 	body += "<p>You requested path: " + request.Path + "</p>\n"
 
@@ -37,9 +32,7 @@ func (h EchoHandler) Handle(request http.Request) http.Response {
 	}
 	body += "</tbody></table>\n"
 
-	response.Body = body
-
-	return response
+	return http.MakeSimpleResponse(body)
 }
 
 // sample file serving handler
