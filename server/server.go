@@ -37,6 +37,11 @@ func HandleRequest(conn net.Conn, handler Handler) {
 	// write out response
 	conn.Write([]byte(response.Protocol.String() + " "))
 	conn.Write([]byte(response.Status.String() + "\n"))
+
+	for _, header := range response.Headers {
+		conn.Write([]byte(header.Key + ": " + header.Val))
+	}
+
 	conn.Write([]byte("\n"))
 	conn.Write([]byte(response.Body + "\n"))
 }
