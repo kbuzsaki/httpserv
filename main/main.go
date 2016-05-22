@@ -16,6 +16,7 @@ func main() {
 		{"^/$", server.HelloWorldHandler{}},
 		{"^/hello$", server.HelloWorldHandler{}},
 		{"^/hello/", server.HelloWorldHandler{}},
+		{"^/static/", server.StaticFileHandler{"."}},
 	}
 	handler := server.RoutingHandler{
 		routes,

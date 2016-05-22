@@ -3,6 +3,8 @@ package server
 import (
 	"encoding/json"
 	"github.com/kbuzsaki/httpserv/http"
+	"io/ioutil"
+	"path"
 )
 
 // sample hello world server and handler
@@ -36,6 +38,29 @@ func (h EchoHandler) Handle(request http.Request) http.Response {
 	body += "</tbody></table>\n"
 
 	response.Body = body
+
+	return response
+}
+
+// sample file serving handler
+type StaticFileHandler struct {
+	BasePath string
+}
+
+func (h StaticFileHandler) Handle(request http.Request) http.Response {
+	var response http.Response
+	response.Protocol = http.HttpOneDotOne
+
+	filePath := path.Join(h.BasePath, request.Path)
+	bytes, err := ioutil.ReadFile(filePath)
+
+	if err != nil {
+		response.Status = http.StatusNotFound
+		response.Body = err.Error()
+	} else {
+		response.Status = http.StatusOk
+		response.Body = string(bytes)
+	}
 
 	return response
 }
